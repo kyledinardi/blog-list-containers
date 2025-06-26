@@ -1,0 +1,21 @@
+services:
+  app:
+    image: blog-list-frontend
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    container_name: blog-list-frontend
+  server:
+    image: blog-list-backend
+    env_file: ".env"
+    container_name: blog-list-backend
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+    depends_on:
+      - app
+      - server
